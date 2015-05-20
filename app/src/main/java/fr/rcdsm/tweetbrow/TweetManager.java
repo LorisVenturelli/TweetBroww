@@ -128,4 +128,20 @@ public class TweetManager {
 
         return allUsers;
     }
+
+    public ArrayList<Tweet> listAllTweetsWithParent(long id_parent){
+
+        RealmResults<Tweet> query = realm.where(Tweet.class).equalTo("response", id_parent).findAll();
+
+        query.sort("date_create", RealmResults.SORT_ORDER_ASCENDING);
+
+        ArrayList<Tweet> allTweets = new ArrayList<>();
+
+        for (Tweet tweet : query){
+            allTweets.add(tweet);
+        }
+
+        return allTweets;
+
+    }
 }
