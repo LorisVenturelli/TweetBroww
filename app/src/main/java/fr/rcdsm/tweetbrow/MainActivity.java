@@ -28,10 +28,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     ArrayList<Tweet> allNotes;
     TweetManager manager;
-    TweetAdapter mListAdapter;
     Menu MainMenu;
-
-    ArrayAdapter<String> searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

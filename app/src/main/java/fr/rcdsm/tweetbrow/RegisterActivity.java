@@ -14,6 +14,7 @@ import android.widget.Toast;
 public class RegisterActivity extends ActionBarActivity {
 
     EditText loginField;
+    EditText pseudoField;
     EditText emailField;
     EditText passwordField;
     EditText rePasswordField;
@@ -27,6 +28,7 @@ public class RegisterActivity extends ActionBarActivity {
         setContentView(R.layout.layout_register);
 
         loginField = (EditText) findViewById(R.id.registerLogin);
+        pseudoField = (EditText) findViewById(R.id.registerPseudo);
         emailField = (EditText) findViewById(R.id.registerEmail);
         passwordField = (EditText) findViewById(R.id.registerPassword);
         rePasswordField = (EditText) findViewById(R.id.registerPasswordConfirm);
@@ -45,7 +47,7 @@ public class RegisterActivity extends ActionBarActivity {
                     if (!passwordField.getText().toString().equals(rePasswordField.getText().toString()))
                         throw new Exception("Les mot de passes ne se ressemblent pas !");
 
-                    ClientAPI.getInstance().register(loginField.getText().toString(), passwordField.getText().toString(), emailField.getText().toString(), new ClientAPI.APIListener() {
+                    ClientAPI.getInstance().register(loginField.getText().toString(), pseudoField.getText().toString(), passwordField.getText().toString(), emailField.getText().toString(), new ClientAPI.APIListener() {
                         @Override
                         public void callback() {
 

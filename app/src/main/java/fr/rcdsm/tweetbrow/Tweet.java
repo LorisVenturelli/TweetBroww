@@ -17,8 +17,9 @@ public class Tweet extends RealmObject {
     private String    message;
     private String    login;
     private String    pseudo;
-    private boolean    retweet;
-    private boolean     favoris;
+    private boolean   retweet;
+    private boolean   favoris;
+    private long      response;
 
     public long getId() {
         return id;
@@ -73,5 +74,13 @@ public class Tweet extends RealmObject {
 
     public void setFavoris(boolean favoris) {
         this.favoris = favoris;
+    }
+
+    public long getResponse() {
+        return response;
+    }
+
+    public void setResponse(long response) {
+        this.response = response;
     }
 }

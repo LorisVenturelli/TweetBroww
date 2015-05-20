@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by rcdsm on 27/04/15.
@@ -84,7 +85,7 @@ public class ClientAPI {
 
                         listener.callback();
                     } else
-                        Log.e("Erreur connect", "API return false : " + json.toString());
+                        Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
                     Log.e("Catch connect", "Exception " + e.getMessage());
@@ -123,7 +124,7 @@ public class ClientAPI {
 
     }
 
-    public void register(final String login, final String password, final String email, final APIListener listener){
+    public void register(final String login, final String pseudo, final String password, final String email, final APIListener listener){
 
         final AQuery aq = new AQuery(context);
 
@@ -131,20 +132,15 @@ public class ClientAPI {
         params.put("login", login);
         params.put("password", password);
         params.put("email", email);
-
-        try {
-            Log.d("Parametres", "params: " + params.toString());
-        } catch (Exception e) {
-            Log.e("First catch register", "Exception " + e.getMessage());
-        }
+        params.put("pseudo", pseudo);
 
         aq.ajax(urlApi+"/tweetbrow/register", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
-                Log.d("Callback api", json.toString());
-
                 try {
+
+                    Log.d("Callback api", json.toString());
 
                     if (json.getString("reponse").equals("success")) {
                         listener.callback();
@@ -425,10 +421,12 @@ public class ClientAPI {
                         Realm realm = Realm.getInstance(context);
                         realm.beginTransaction();
 
+                        RealmResults<User> query = realm.where(User.class).findAll();
+                        query.clear();
+
                         JSONArray users = json.getJSONArray("data");
 
                         for (int i = 0; i < users.length(); i++) {
-                            users.getJSONObject(i).put("token", "notoken");
                             realm.createOrUpdateObjectFromJson(User.class, users.getJSONObject(i));
                         }
 

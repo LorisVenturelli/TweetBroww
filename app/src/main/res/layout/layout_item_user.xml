@@ -28,11 +28,12 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
             android:text="Follow"
             android:id="@+id/listFollow"
-            android:textColor="#ff808080"
+            android:textColor="#FFFFFF"
+            android:background="#ff17467b"
             android:maxLines="5"
             android:layout_alignBottom="@+id/listLogin"
             android:layout_centerVertical="true" />
