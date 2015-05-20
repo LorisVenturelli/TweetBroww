@@ -93,6 +93,35 @@ public class ClientAPI {
         });
     }
 
+    public void logout(final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+
+        aq.ajax("http://172.31.1.120:8888/tweetbrow/logout", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                Log.d("Callback api logout", json.toString());
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } catch (Exception e) {
+                    Log.e("Catch json register", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+
+    }
+
     public void register(final String login, final String password, final String email, final APIListener listener){
 
         final AQuery aq = new AQuery(context);

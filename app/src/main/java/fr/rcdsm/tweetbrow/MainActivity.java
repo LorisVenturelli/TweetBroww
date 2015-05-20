@@ -163,6 +163,11 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     private void logout(){
 
+        ClientAPI.getInstance().logout(new ClientAPI.APIListener() {
+            @Override
+            public void callback() {}
+        });
+
         SharedPreferences preferences = this.getApplicationContext().getSharedPreferences("token", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
