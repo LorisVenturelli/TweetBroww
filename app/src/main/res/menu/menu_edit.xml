@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".DetailNote">
+
+
+    <item android:id="@+id/action_save"
+        android:title="Enregistrer"
+        app:showAsAction="ifRoom"
+        android:icon="@mipmap/ic_check"></item>
+
+    <item android:id="@+id/action_delete"
+        android:title="Supprimer"
+        android:icon="@mipmap/ic_delete"></item>
+    <item android:id="@+id/action_send_mail"
+        android:title="Envoyer par mail"
+        android:icon="@android:drawable/ic_menu_send"></item>
+
+</menu>

@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="Déconnexion"/>
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@mipmap/ic_action_refresh"
+        app:showAsAction="ifRoom"
+        android:title="Rafraichir"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@mipmap/ic_search"
+        android:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView"
+        android:title="Rechercher"/>
+</menu>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:backgroundTint="#eeeeee">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:background="@drawable/border_shadow"
+        android:backgroundTint="#FFFFFF"
+        android:orientation="vertical"
+        android:layout_alignParentStart="false">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:text="Titre :"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/editTitle"
+            android:hint="Titre"
+            android:layout_below="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColorHint="#ff5f5f5f" />
+
+        <TextView
+            android:id="@+id/text_content"
+            android:text="Contenu :"
+            android:layout_below="@+id/editTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+        <EditText
+            android:id="@+id/editContent"
+            android:hint="Contenu"
+            android:layout_below="@+id/text_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:textColorHint="#FF5F5F5F" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
