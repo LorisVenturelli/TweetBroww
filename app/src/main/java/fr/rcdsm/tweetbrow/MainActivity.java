@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        User user = User.getInstance();
+        final User user = User.getInstance();
 
         SharedPreferences preferences = getSharedPreferences("token", Context.MODE_PRIVATE);
         String token = preferences.getString("token", null);
@@ -71,8 +71,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Reply.class);
                 intent.putExtra("action", "add");
-                intent.putExtra("login", User.getInstance().getLogin());
-                intent.putExtra("pseudo",User.getInstance().getPseudo());
+                intent.putExtra("login", user.getLogin());
+                intent.putExtra("pseudo",user.getPseudo());
                 startActivity(intent);
             }
         });

@@ -68,6 +68,7 @@ public class Reply extends ActionBarActivity {
             login.setText("@"+logins);
             pseudo.setText(pseudos);
             message.setText(loginsReplay);
+            message.setSelection(message.getText().length());
 
             tweeter.setOnClickListener(new View.OnClickListener() {
                 @Override
