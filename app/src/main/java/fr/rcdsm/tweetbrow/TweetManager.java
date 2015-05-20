@@ -65,10 +65,15 @@ public class TweetManager {
         return realm.where(Tweet.class).equalTo("id", id).findFirst();
 
     }
+    public User getUserWithId(long id){
 
-    public void addTweet(String newContent) {
+        return realm.where(User.class).equalTo("id", id).findFirst();
 
-        ClientAPI.getInstance().createTweet( newContent, new ClientAPI.APIListener() {
+    }
+
+    public void addTweet(String newContent, String id_parent) {
+
+        ClientAPI.getInstance().createTweet(newContent, id_parent, new ClientAPI.APIListener() {
             @Override
             public void callback() {
                 Log.d("Send tweet api", "Envoi du tweet terminée.");

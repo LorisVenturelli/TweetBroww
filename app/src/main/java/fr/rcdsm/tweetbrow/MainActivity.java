@@ -43,8 +43,11 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         String token = preferences.getString("token", null);
         user.setToken(token);
 
-        if(user.getToken() == null){
+        user.setPseudo(preferences.getString("pseudo", null));
+        user.setLogin(preferences.getString("login", null));
+        user.setId(Long.valueOf(preferences.getString("id", null)));
 
+        if(token == null){
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
 
@@ -72,8 +75,15 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 Intent intent = new Intent(MainActivity.this, Reply.class);
                 intent.putExtra("action", "add");
                 intent.putExtra("login", user.getLogin());
-                intent.putExtra("pseudo",user.getPseudo());
+                intent.putExtra("pseudo", user.getPseudo());
                 startActivity(intent);
+            }
+        });
+
+        ClientAPI.getInstance().syncAllUsers(new ClientAPI.APIListener() {
+            @Override
+            public void callback() {
+                Log.d("Sync users", "Synchronisation users terminée.");
             }
         });
     }

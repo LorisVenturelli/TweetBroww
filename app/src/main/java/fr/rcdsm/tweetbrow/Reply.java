@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,18 +26,22 @@ public class Reply extends ActionBarActivity {
     TextView numberChar;
     Button tweeter;
 
+    String id_parent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_edit_tweet);
 
         manager = new TweetManager(this);
+
         message = (EditText)findViewById(R.id.editNewsReply);
         login =(TextView)findViewById(R.id.loginReply);
         pseudo = (TextView)findViewById(R.id.pseudoReply);
         numberChar=(TextView)findViewById(R.id.numberCharReply);
         tweeter = (Button)findViewById(R.id.buttonReply);
 
+        id_parent = null;
 
         Bundle b = getIntent().getExtras();
         action = b.getString("action");
@@ -56,54 +61,34 @@ public class Reply extends ActionBarActivity {
 
         message.addTextChangedListener(txwatcher);
 
+        login.setText("@"+User.getInstance().getLogin());
+        pseudo.setText(User.getInstance().getPseudo());
+
         if (action.equals("reply")) {
 
             setTitle("Repondre à un Tweet");
 
-            String logins = b.getString("login");
-            String pseudos = b.getString("pseudo");
-            String loginsReplay = b.getString("loginReply");
+            id_parent = b.getString("id_parent");
+            Tweet parent = manager.getTweetWithId(Long.valueOf(id_parent));
 
-            login.setText("@"+logins);
-            pseudo.setText(pseudos);
-            message.setText(loginsReplay);
+            message.setText("@" + parent.getLogin() + " ");
             message.setSelection(message.getText().length());
-
-            tweeter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TweetManager tweetManag = new TweetManager(getApplicationContext());
-                    Tweet tweets = new Tweet();
-                    tweets.setMessage(message.getText().toString());
-                    tweetManag.addTweet(message.getText().toString());
-                    Intent intent = new Intent(Reply.this,MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
 
         } else if(action.equals("add")) {
             setTitle("Ajouter un Tweet");
-
-            String logins = b.getString("login");
-            String pseudos = b.getString("pseudo");
-
-            login.setText(logins);
-            pseudo.setText("@"+pseudos);
-
-            tweeter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TweetManager tweetManag = new TweetManager(getApplicationContext());
-                    Tweet tweets = new Tweet();
-                    tweets.setMessage(message.getText().toString());
-                    tweetManag.addTweet(message.getText().toString());
-                    finish();
-                }
-            });
-
-
         }
+
+        tweeter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                manager.addTweet(message.getText().toString(), id_parent);
+
+                Intent intent = new Intent(Reply.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
     }

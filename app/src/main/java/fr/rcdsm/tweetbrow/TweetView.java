@@ -156,10 +156,8 @@ public class TweetView extends ActionBarActivity implements AdapterView.OnItemCl
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(TweetView.this, Reply.class);
-                        intent.putExtra("login", User.getInstance().getLogin());
+                        intent.putExtra("id_parent", String.valueOf(id));
                         intent.putExtra("action", "reply");
-                        intent.putExtra("pseudo", User.getInstance().getPseudo());
-                        intent.putExtra("loginReply", login.getText());
                         startActivity(intent);
 
                     }

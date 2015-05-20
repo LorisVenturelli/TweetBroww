@@ -32,6 +32,8 @@ public class ClientAPI {
 
     private String urlApi;
 
+    private Realm realm;
+
 
     public static void createInstance(Context appContext) {
         instance = new ClientAPI(appContext);
@@ -44,6 +46,8 @@ public class ClientAPI {
     private ClientAPI(Context appContext) {
         this.context = appContext;
         this.urlApi = "http://192.168.100.38:8888";
+
+        this.realm = Realm.getInstance(appContext);
     }
 
     public interface APIListener{
@@ -60,8 +64,6 @@ public class ClientAPI {
 
         Log.d("Parametres", "params: " + params.toString());
 
-        Log.e("url api", urlApi);
-
         aq.ajax(urlApi+"/tweetbrow/connect", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
@@ -75,13 +77,18 @@ public class ClientAPI {
                         SharedPreferences preferences = context.getSharedPreferences("token", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("token", json.getJSONObject("data").getString("token"));
+                        editor.putString("login", json.getJSONObject("data").getString("login"));
+                        editor.putString("pseudo", json.getJSONObject("data").getString("pseudo"));
+                        editor.putString("id", json.getJSONObject("data").getString("id"));
                         editor.commit();
 
-                        User userInstance = User.getInstance();
-                        userInstance.setId(Long.valueOf(json.getJSONObject("data").getString("id")));
-                        userInstance.setLogin(json.getJSONObject("data").getString("login"));
-                        userInstance.setPseudo(json.getJSONObject("data").getString("pseudo"));
-                        userInstance.setToken(json.getJSONObject("data").getString("token"));
+                        realm.beginTransaction();
+                            User userInstance = User.getInstance();
+                            userInstance.setId(Long.valueOf(json.getJSONObject("data").getString("id")));
+                            userInstance.setLogin(json.getJSONObject("data").getString("login"));
+                            userInstance.setPseudo(json.getJSONObject("data").getString("pseudo"));
+                            userInstance.setToken(json.getJSONObject("data").getString("token"));
+                        realm.commitTransaction();
 
                         listener.callback();
                     } else
@@ -206,12 +213,13 @@ public class ClientAPI {
 
     }
 
-    public void createTweet( final String content, final APIListener listener){
+    public void createTweet( final String content, final String id_parent, final APIListener listener){
         final AQuery aq = new AQuery(context);
 
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
         params.put("message", content);
+        params.put("id_parent", id_parent);
 
         Log.d("Parametres", "params: " + params.toString());
 
