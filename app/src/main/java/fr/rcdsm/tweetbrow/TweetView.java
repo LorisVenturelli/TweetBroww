@@ -10,18 +10,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
 /**
  * Created by rcdsm on 10/04/15.
  */
-public class TweetView extends ActionBarActivity {
+public class TweetView extends ActionBarActivity implements AdapterView.OnItemClickListener{
 
     String action;
 
@@ -39,7 +42,12 @@ public class TweetView extends ActionBarActivity {
     ImageView retweet;
     ImageView favoris;
 
+    long id;
+
     Realm realm;
+
+    ListView listReply;
+    ArrayList<Tweet> allTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,8 @@ public class TweetView extends ActionBarActivity {
         date = (TextView) findViewById(R.id.dateView);
         message = (TextView) findViewById(R.id.messageView);
 
+        listReply = (ListView) findViewById(R.id.listReply);
+
         manager = new TweetManager(this);
 
 
@@ -70,7 +80,7 @@ public class TweetView extends ActionBarActivity {
 
                 setTitle("Tweet");
 
-                long id = b.getLong("id");
+                 id = b.getLong("id");
 
                 tweet = manager.getTweetWithId(id);
 
@@ -243,5 +253,30 @@ public class TweetView extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        refreshListView();
+    }
+
+    private void refreshListView(){
+
+        allTweet = manager.listAllTweetsWithParent(id);
+        TweetAdapter adapter = new TweetAdapter(TweetView.this, allTweet);
+
+        listReply.setOnItemClickListener(TweetView.this);
+        listReply.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        Intent intent = new Intent(TweetView.this, TweetView.class);
+        intent.putExtra("action", "view");
+        intent.putExtra("id", id);
+
+        startActivity(intent);
     }
 }

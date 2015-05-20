@@ -18,7 +18,6 @@ public class Reply extends ActionBarActivity {
     String action;
 
     TweetManager manager;
-    Tweet tweet;
 
     EditText message;
     TextView login;
