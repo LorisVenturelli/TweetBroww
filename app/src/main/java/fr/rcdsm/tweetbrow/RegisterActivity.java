@@ -14,6 +14,7 @@ import android.widget.Toast;
 public class RegisterActivity extends ActionBarActivity {
 
     EditText loginField;
+    EditText emailField;
     EditText passwordField;
     EditText rePasswordField;
 
@@ -26,6 +27,7 @@ public class RegisterActivity extends ActionBarActivity {
         setContentView(R.layout.layout_register);
 
         loginField = (EditText) findViewById(R.id.registerLogin);
+        emailField = (EditText) findViewById(R.id.registerEmail);
         passwordField = (EditText) findViewById(R.id.registerPassword);
         rePasswordField = (EditText) findViewById(R.id.registerPasswordConfirm);
 
@@ -38,8 +40,12 @@ public class RegisterActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
 
-                if (passwordField.getText().toString().equals(rePasswordField.getText().toString())) {
-                    ClientAPI.getInstance().register(loginField.getText().toString(), passwordField.getText().toString(), new ClientAPI.APIListener() {
+                try {
+
+                    if (!passwordField.getText().toString().equals(rePasswordField.getText().toString()))
+                        throw new Exception("Les mot de passes ne se ressemblent pas !");
+
+                    ClientAPI.getInstance().register(loginField.getText().toString(), passwordField.getText().toString(), emailField.getText().toString(), new ClientAPI.APIListener() {
                         @Override
                         public void callback() {
 
@@ -51,10 +57,14 @@ public class RegisterActivity extends ActionBarActivity {
                                     finish();
                                 }
                             });
+
                         }
                     });
-                } else
-                    Toast.makeText(RegisterActivity.this.getApplicationContext(), "Les mot de passes ne se ressemblent pas !", Toast.LENGTH_SHORT).show();
+
+                } catch (Exception e) {
+                    Toast.makeText(RegisterActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

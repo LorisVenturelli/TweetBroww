@@ -3,6 +3,7 @@ package fr.rcdsm.tweetbrow;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
@@ -92,18 +93,17 @@ public class ClientAPI {
         });
     }
 
-    public void register(final String login, final String password, final APIListener listener){
+    public void register(final String login, final String password, final String email, final APIListener listener){
 
         final AQuery aq = new AQuery(context);
 
         Map<String, String> params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
+        params.put("email", email);
 
         try {
-
             Log.d("Parametres", "params: " + params.toString());
-
         } catch (Exception e) {
             Log.e("First catch register", "Exception " + e.getMessage());
         }
@@ -112,15 +112,17 @@ public class ClientAPI {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
+                Log.d("Callback api", json.toString());
+
                 try {
 
                     if (json.getString("reponse").equals("success")) {
                         listener.callback();
                     } else
-                        Log.e("Error register", "Error status code : " + status.getCode());
+                        Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
-                    Log.e("Catch register", "Exception " + e.getMessage());
+                    Log.e("Catch json register", "Exception " + e.getMessage());
                 }
 
             }
