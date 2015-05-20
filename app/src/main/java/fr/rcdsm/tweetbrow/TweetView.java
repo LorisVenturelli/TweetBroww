@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,87 +60,109 @@ public class TweetView extends ActionBarActivity {
 
         manager = new TweetManager(this);
 
+
         Bundle b = getIntent().getExtras();
-        action = b.getString("action");
+        if(b!=null) {
 
-        if (action.equals("view")) {
+            action = b.getString("action");
 
-            setTitle("Tweet");
+            if (action.equals("view")) {
 
-            long id = b.getLong("id");
+                setTitle("Tweet");
 
-            tweet = manager.getTweetWithId(id);
+                long id = b.getLong("id");
 
-            login.setText("@"+tweet.getLogin());
-            pseudo.setText(tweet.getPseudo());
-            date.setText(format.format(tweet.getDate_create()));
-            message.setText(tweet.getMessage());
-        } else {
-            setTitle("Ajout d'une tweetbrow");
-        }
+                tweet = manager.getTweetWithId(id);
 
-        if(tweet.getRetweet()){
-            retweet.setImageResource(R.mipmap.retweet_blue);
-        }
-        if(tweet.getFavoris()) {
-            favoris.setImageResource(R.mipmap.favori_blue);
-        }
+                login.setText("@" + tweet.getLogin());
+                pseudo.setText(tweet.getPseudo());
+                date.setText(format.format(tweet.getDate_create()));
+                message.setText(tweet.getMessage());
 
-
-
-        retweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 if(tweet.getRetweet()){
-                    ClientAPI.getInstance().unretweet(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
-                        @Override
-                        public void callback() {
-                            realm.beginTransaction();
-                            retweet.setImageResource(R.mipmap.retweet);
-                            tweet.setRetweet(false);
-                            realm.commitTransaction();
-                        }
-                    });
-                }else{
-                    ClientAPI.getInstance().retweet(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
-                        @Override
-                        public void callback() {
-                            realm.beginTransaction();
-                            retweet.setImageResource(R.mipmap.retweet_blue);
-                            tweet.setRetweet(true);
-                            realm.commitTransaction();
-                        }
-                    });
+                    retweet.setImageResource(R.mipmap.retweet_blue);
                 }
-            }
-        });
+                if(tweet.getFavoris()) {
+                    favoris.setImageResource(R.mipmap.favori_blue);
+                }
 
-        favoris.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(tweet.getFavoris()){
-                    ClientAPI.getInstance().unfavoris(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
-                        @Override
-                        public void callback() {
-                            realm.beginTransaction();
-                            favoris.setImageResource(R.mipmap.favori);
-                            tweet.setFavoris(false);
-                            realm.commitTransaction();
+
+
+                retweet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (tweet.getRetweet()) {
+                            ClientAPI.getInstance().unretweet(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                                @Override
+                                public void callback() {
+                                    realm.beginTransaction();
+                                    retweet.setImageResource(R.mipmap.retweet);
+                                    tweet.setRetweet(false);
+                                    realm.commitTransaction();
+                                }
+                            });
+                        } else {
+                            ClientAPI.getInstance().retweet(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                                @Override
+                                public void callback() {
+                                    realm.beginTransaction();
+                                    retweet.setImageResource(R.mipmap.retweet_blue);
+                                    tweet.setRetweet(true);
+                                    realm.commitTransaction();
+                                }
+                            });
                         }
-                    });
-                }else{
-                    ClientAPI.getInstance().favoris(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
-                        @Override
-                        public void callback() {
-                            realm.beginTransaction();
-                            favoris.setImageResource(R.mipmap.favori_blue);
-                            tweet.setFavoris(true);
-                            realm.commitTransaction();
+                    }
+                });
+
+                favoris.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (tweet.getFavoris()) {
+                            ClientAPI.getInstance().unfavoris(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                                @Override
+                                public void callback() {
+                                    realm.beginTransaction();
+                                    favoris.setImageResource(R.mipmap.favori);
+                                    tweet.setFavoris(false);
+                                    realm.commitTransaction();
+                                }
+                            });
+                        } else {
+                            ClientAPI.getInstance().favoris(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                                @Override
+                                public void callback() {
+                                    realm.beginTransaction();
+                                    favoris.setImageResource(R.mipmap.favori_blue);
+                                    tweet.setFavoris(true);
+                                    realm.commitTransaction();
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+                });
+
+                repondre.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(TweetView.this, Reply.class);
+                        intent.putExtra("login", User.getInstance().getLogin());
+                        intent.putExtra("action", "reply");
+                        intent.putExtra("pseudo", User.getInstance().getPseudo());
+                        intent.putExtra("loginReply", login.getText());
+                        startActivity(intent);
+
+                    }
+                });
+
+            } else {
+                setTitle("Ajout d'une tweetbrow");
             }
-        });
+        }
+        else{
+            Log.e("Error","Le Bundle est vide mon gars :/");
+        }
+
     }
 
     @Override

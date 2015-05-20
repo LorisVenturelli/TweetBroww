@@ -208,7 +208,7 @@ public class ClientAPI {
 
     }
 
-    public void createTweet(final String title, final String content, final APIListener listener){
+    public void createTweet( final String content, final APIListener listener){
         final AQuery aq = new AQuery(context);
 
         Map<String, String> params = new HashMap<>();

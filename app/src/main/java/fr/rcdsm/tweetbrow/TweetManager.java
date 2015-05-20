@@ -65,15 +65,14 @@ public class TweetManager {
 
     }
 
-    public void addTweet(String newTitle, String newContent) {
+    public void addTweet(String newContent) {
 
-        ClientAPI.getInstance().createTweet(newTitle, newContent, new ClientAPI.APIListener() {
+        ClientAPI.getInstance().createTweet( newContent, new ClientAPI.APIListener() {
             @Override
             public void callback() {
                 Log.d("Send tweet api", "Envoi du tweet terminée.");
             }
         });
-
     }
 
     public ArrayList<Tweet> searchTweetOnList(String search) {

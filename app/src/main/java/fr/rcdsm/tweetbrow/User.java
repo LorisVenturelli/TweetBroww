@@ -6,6 +6,16 @@ package fr.rcdsm.tweetbrow;
 public class User {
 
     private String token;
+
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    private String pseudo;
     private String login;
 
     private static User INSTANCE = null;
@@ -45,3 +55,5 @@ public class User {
         INSTANCE.setLogin(null);
     }
 }
+
+

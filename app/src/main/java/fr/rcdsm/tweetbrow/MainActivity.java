@@ -69,9 +69,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, TweetView.class);
+                Intent intent = new Intent(MainActivity.this, Reply.class);
                 intent.putExtra("action", "add");
-
+                intent.putExtra("login", User.getInstance().getLogin());
+                intent.putExtra("pseudo",User.getInstance().getPseudo());
                 startActivity(intent);
             }
         });
@@ -180,6 +181,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-
     }
+
 }
