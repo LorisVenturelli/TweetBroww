@@ -29,6 +29,8 @@ public class ClientAPI {
 
     private Context context;
 
+    private String urlApi;
+
 
     public static void createInstance(Context appContext) {
         instance = new ClientAPI(appContext);
@@ -40,6 +42,7 @@ public class ClientAPI {
 
     private ClientAPI(Context appContext) {
         this.context = appContext;
+        this.urlApi = "http://192.168.100.38:8888";
     }
 
     public interface APIListener{
@@ -56,18 +59,15 @@ public class ClientAPI {
 
         Log.d("Parametres", "params: " + params.toString());
 
-        try {
+        Log.e("url api", urlApi);
 
-        } catch (Exception e) {
-            Log.e("First catch connect", "Exception " + e.getMessage());
-        }
-
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/connect", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/connect", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
-                Log.d("Callback api", json.toString());
 
                 try {
+
+                    Log.d("Callback api", json.toString());
 
                     if (json.getString("reponse").equals("success")) {
 
@@ -101,7 +101,7 @@ public class ClientAPI {
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/logout", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/logout", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -138,7 +138,7 @@ public class ClientAPI {
             Log.e("First catch register", "Exception " + e.getMessage());
         }
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/register", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/register", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -168,7 +168,7 @@ public class ClientAPI {
 
         Log.d("Parametres", "params: " + params.toString());
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/timeline", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/timeline", params, JSONObject.class, new AjaxCallback<JSONObject>() {
 
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
@@ -219,7 +219,7 @@ public class ClientAPI {
 
         Log.d("Parametres", "params: " + params.toString());
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/add", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/tweet/add", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -248,7 +248,7 @@ public class ClientAPI {
 
         Log.d("Parametres", "params: " + params.toString());
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/delete", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/tweet/delete", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -283,7 +283,7 @@ public class ClientAPI {
             Log.e("First catch register", "Exception " + e.getMessage());
         }
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/favoris", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/tweet/favoris", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -318,7 +318,7 @@ public class ClientAPI {
             Log.e("First catch register", "Exception " + e.getMessage());
         }
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/unfavoris", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/tweet/unfavoris", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -353,7 +353,7 @@ public class ClientAPI {
             Log.e("First catch register", "Exception " + e.getMessage());
         }
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/retweet", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/tweet/retweet", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -388,7 +388,7 @@ public class ClientAPI {
             Log.e("First catch register", "Exception " + e.getMessage());
         }
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/unretweet", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/tweet/unretweet", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -414,7 +414,7 @@ public class ClientAPI {
         Map<String, String> params = new HashMap<>();
         params.put("token", User.getInstance().getToken());
 
-        aq.ajax("http://172.31.1.120:8888/tweetbrow/user/all", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+        aq.ajax(urlApi+"/tweetbrow/user/all", params, JSONObject.class, new AjaxCallback<JSONObject>() {
             @Override
             public void callback(String url, JSONObject json, AjaxStatus status) {
 
@@ -443,6 +443,58 @@ public class ClientAPI {
 
                 } catch (Exception e) {
                     Log.e("Catch sync users", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void follow(final String id_following, final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+
+        aq.ajax(urlApi+"/tweetbrow/follow/"+id_following, params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Log.e("Erreur create tweet", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch register", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void unfollow(final String id_following, final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+
+        aq.ajax(urlApi+"/tweetbrow/unfollow/"+id_following, params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Log.e("Erreur create tweet", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch register", "Exception " + e.getMessage());
                 }
 
             }

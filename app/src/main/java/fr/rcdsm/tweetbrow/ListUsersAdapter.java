@@ -1,6 +1,7 @@
 package fr.rcdsm.tweetbrow;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
 
 /**
  * Created by rcdsm on 20/05/15.
@@ -19,11 +22,16 @@ public class ListUsersAdapter extends BaseAdapter {
 
     LayoutInflater inflater;
 
+    Realm realm;
+    TweetManager manager;
+
     public ListUsersAdapter(Context context, ArrayList<User> notes) {
         this.context = context;
         this.allUsers = notes;
 
         inflater = LayoutInflater.from(context);
+        realm = Realm.getInstance(context);
+        manager = new TweetManager(context);
     }
 
     @Override
@@ -43,7 +51,7 @@ public class ListUsersAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
 
         if(convertView==null) {
             convertView = inflater.inflate(R.layout.layout_item_user, null);
@@ -59,15 +67,50 @@ public class ListUsersAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        User user = allUsers.get(position);
+        final User user = allUsers.get(position);
 
         holder.pseudo.setText(user.getPseudo());
-        holder.login.setText("@"+user.getLogin());
+        holder.login.setText("@" + user.getLogin());
 
-        if(user.isFollowed())
+        if(user.getId() == User.getInstance().getId())
+            holder.follow.setVisibility(View.INVISIBLE);
+        else if(user.isFollowed())
             holder.follow.setText("UNFOLLOW");
 
+        holder.follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                manager.deleteAll();
+
+                if(!user.isFollowed()){
+
+                    ClientAPI.getInstance().follow(String.valueOf(user.getId()), new ClientAPI.APIListener() {
+                        @Override
+                        public void callback() {
+                            realm.beginTransaction();
+                                holder.follow.setText("UNFOLLOW");
+                                user.setFollowed(true);
+                            realm.commitTransaction();
+                        }
+                    });
+
+                } else {
+
+                    ClientAPI.getInstance().unfollow(String.valueOf(user.getId()), new ClientAPI.APIListener() {
+                        @Override
+                        public void callback() {
+                            realm.beginTransaction();
+                                holder.follow.setText("FOLLOW");
+                                user.setFollowed(false);
+                            realm.commitTransaction();
+                        }
+                    });
+
+                }
+
+            }
+        });
 
         return convertView;
     }
