@@ -121,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
         Intent intent = new Intent(MainActivity.this, TweetView.class);
-        intent.putExtra("action", "edit");
+        intent.putExtra("action", "view");
         intent.putExtra("id", id);
 
         startActivity(intent);

@@ -17,6 +17,8 @@ public class Tweet extends RealmObject {
     private String    message;
     private String    login;
     private String    pseudo;
+    private boolean    retweet;
+    private boolean     favoris;
 
     public long getId() {
         return id;
@@ -55,5 +57,21 @@ public class Tweet extends RealmObject {
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
+    }
+
+    public boolean getRetweet() {
+        return retweet;
+    }
+
+    public void setRetweet(boolean retweet) {
+        this.retweet = retweet;
+    }
+
+    public boolean getFavoris() {
+        return favoris;
+    }
+
+    public void setFavoris(boolean favoris) {
+        this.favoris = favoris;
     }
 }

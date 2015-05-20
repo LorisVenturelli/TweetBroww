@@ -10,7 +10,6 @@ import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -260,6 +259,146 @@ public class ClientAPI {
 
                 } catch (Exception e) {
                     Log.e("Catch delete tweet", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void favoris(final String tweet_id, final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        params.put("tweet_id", tweet_id);
+
+        try {
+
+            Log.d("Parametres", "params: " + params.toString());
+
+        } catch (Exception e) {
+            Log.e("First catch register", "Exception " + e.getMessage());
+        }
+
+        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/favoris", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Log.e("Erreur create tweet", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch register", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void unfavoris(final String tweet_id, final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        params.put("tweet_id", tweet_id);
+
+        try {
+
+            Log.d("Parametres", "params: " + params.toString());
+
+        } catch (Exception e) {
+            Log.e("First catch register", "Exception " + e.getMessage());
+        }
+
+        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/unfavoris", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Log.e("Erreur create tweet", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch register", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void retweet(final String tweet_id, final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        params.put("tweet_id", tweet_id);
+
+        try {
+
+            Log.d("Parametres", "params: " + params.toString());
+
+        } catch (Exception e) {
+            Log.e("First catch register", "Exception " + e.getMessage());
+        }
+
+        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/retweet", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Log.e("Erreur create tweet", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch register", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void unretweet(final String tweet_id, final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+        params.put("tweet_id", tweet_id);
+
+        try {
+
+            Log.d("Parametres", "params: " + params.toString());
+
+        } catch (Exception e) {
+            Log.e("First catch register", "Exception " + e.getMessage());
+        }
+
+        aq.ajax("http://172.31.1.120:8888/tweetbrow/tweet/unretweet", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+                        listener.callback();
+                    } else
+                        Log.e("Erreur create tweet", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch register", "Exception " + e.getMessage());
                 }
 
             }

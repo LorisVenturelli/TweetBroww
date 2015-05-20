@@ -8,9 +8,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+
+import io.realm.Realm;
 
 /**
  * Created by rcdsm on 10/04/15.
@@ -19,47 +24,130 @@ public class TweetView extends ActionBarActivity {
 
     String action;
 
-    EditText title;
-    EditText content;
+    TextView login;
+    TextView pseudo;
+    TextView date;
+    TextView message;
 
     TweetManager manager;
     Tweet tweet;
 
+    SimpleDateFormat format;
+
+    ImageView repondre;
+    ImageView retweet;
+    ImageView favoris;
+
+    Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_editnote);
+        setContentView(R.layout.view_layout);
 
-        title = (EditText) findViewById(R.id.editTitle);
-        content = (EditText) findViewById(R.id.editContent);
+        realm = Realm.getInstance(getApplicationContext());
+        format = new SimpleDateFormat("MMMM dd, yyyy hh:mm aa");
+
+        repondre=(ImageView)findViewById(R.id.repondreButton);
+        retweet=(ImageView)findViewById(R.id.retweetButton);
+        favoris=(ImageView)findViewById(R.id.favoriButton);
+
+        pseudo = (TextView) findViewById(R.id.pseudoView);
+        login = (TextView) findViewById(R.id.loginView);
+        date = (TextView) findViewById(R.id.dateView);
+        message = (TextView) findViewById(R.id.messageView);
 
         manager = new TweetManager(this);
 
         Bundle b = getIntent().getExtras();
         action = b.getString("action");
 
-        if (action.equals("edit")) {
+        if (action.equals("view")) {
 
-            setTitle("Edition d'une tweetbrow");
+            setTitle("Tweet");
 
             long id = b.getLong("id");
 
             tweet = manager.getTweetWithId(id);
 
-            title.setText(tweet.getPseudo(), TextView.BufferType.EDITABLE);
-            content.setText(tweet.getMessage(), TextView.BufferType.EDITABLE);
+            login.setText("@"+tweet.getLogin());
+            pseudo.setText(tweet.getPseudo());
+            date.setText(format.format(tweet.getDate_create()));
+            message.setText(tweet.getMessage());
         } else {
             setTitle("Ajout d'une tweetbrow");
         }
 
+        if(tweet.getRetweet()){
+            retweet.setImageResource(R.mipmap.retweet_blue);
+        }
+        if(tweet.getFavoris()) {
+            favoris.setImageResource(R.mipmap.favori_blue);
+        }
+
+
+
+        retweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(tweet.getRetweet()){
+                    ClientAPI.getInstance().unretweet(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                        @Override
+                        public void callback() {
+                            realm.beginTransaction();
+                            retweet.setImageResource(R.mipmap.retweet);
+                            tweet.setRetweet(false);
+                            realm.commitTransaction();
+                        }
+                    });
+                }else{
+                    ClientAPI.getInstance().retweet(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                        @Override
+                        public void callback() {
+                            realm.beginTransaction();
+                            retweet.setImageResource(R.mipmap.retweet_blue);
+                            tweet.setRetweet(true);
+                            realm.commitTransaction();
+                        }
+                    });
+                }
+            }
+        });
+
+        favoris.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(tweet.getFavoris()){
+                    ClientAPI.getInstance().unfavoris(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                        @Override
+                        public void callback() {
+                            realm.beginTransaction();
+                            favoris.setImageResource(R.mipmap.favori);
+                            tweet.setFavoris(false);
+                            realm.commitTransaction();
+                        }
+                    });
+                }else{
+                    ClientAPI.getInstance().favoris(String.valueOf(tweet.getId()), new ClientAPI.APIListener() {
+                        @Override
+                        public void callback() {
+                            realm.beginTransaction();
+                            favoris.setImageResource(R.mipmap.favori_blue);
+                            tweet.setFavoris(true);
+                            realm.commitTransaction();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        if(action.equals("edit"))
-            inflater.inflate(R.menu.menu_edit, menu);
+        if(action.equals("view"))
+            inflater.inflate(R.menu.menu_view, menu);
         else
             inflater.inflate(R.menu.menu_add, menu);
 
@@ -108,13 +196,13 @@ public class TweetView extends ActionBarActivity {
             return true;
         }
         else if(id == R.id.action_save){
-            String newTitle = title.getText().toString().trim();
+           /* String newTitle = title.getText().toString().trim();
             String newContent = content.getText().toString().trim();
 
             //if (action.equals("edit"))
             //    manager.updateTweet(tweet.getId(), newTitle, newContent);
             //else
-            manager.addTweet(newTitle, newContent);
+            manager.addTweet(newTitle, newContent);*/
 
             finish();
         }
