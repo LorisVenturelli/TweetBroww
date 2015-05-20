@@ -43,18 +43,18 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         String token = preferences.getString("token", null);
         user.setToken(token);
 
-        user.setPseudo(preferences.getString("pseudo", null));
-        user.setLogin(preferences.getString("login", null));
-        user.setId(Long.valueOf(preferences.getString("id", null)));
-
         if(token == null){
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
 
             finish();
         }
-        else
-            Log.d("User instance","Login: "+user.getLogin()+" - Token: "+user.getToken());
+        else {
+            Log.d("User instance", "Login: " + user.getLogin() + " - Token: " + user.getToken());
+            user.setPseudo(preferences.getString("pseudo", null));
+            user.setLogin(preferences.getString("login", null));
+            user.setId(Long.valueOf(preferences.getString("id", null)));
+        }
 
         setContentView(R.layout.activity_main);
 
