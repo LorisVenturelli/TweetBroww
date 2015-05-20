@@ -3,6 +3,7 @@ package fr.rcdsm.tweetbrow;
 import android.content.Context;
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -113,5 +114,18 @@ public class TweetManager {
             }
         });
 
+    }
+
+    public ArrayList<User> listAllUsers() {
+        RealmResults<User> query = realm.where(User.class).findAll();
+        query.sort("id", RealmResults.SORT_ORDER_DESCENDING);
+
+        ArrayList<User> allUsers = new ArrayList<>();
+
+        for (User user : query){
+            allUsers.add(user);
+        }
+
+        return allUsers;
     }
 }

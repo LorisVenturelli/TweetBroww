@@ -38,6 +38,17 @@
         </activity>
 
         <activity
+            android:name="fr.rcdsm.tweetbrow.ListUsersActivity"
+            android:label="Liste de tous les utilisateurs"
+            android:parentActivityName=".LoginActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
+
+        </activity>
+
+        <activity
             android:name="fr.rcdsm.tweetbrow.RegisterActivity"
             android:label="Inscription"
             android:parentActivityName=".LoginActivity">

@@ -77,7 +77,9 @@ public class ClientAPI {
                         editor.commit();
 
                         User userInstance = User.getInstance();
-                        userInstance.setLogin(login);
+                        userInstance.setId(Long.valueOf(json.getJSONObject("data").getString("id")));
+                        userInstance.setLogin(json.getJSONObject("data").getString("login"));
+                        userInstance.setPseudo(json.getJSONObject("data").getString("pseudo"));
                         userInstance.setToken(json.getJSONObject("data").getString("token"));
 
                         listener.callback();
@@ -399,6 +401,48 @@ public class ClientAPI {
 
                 } catch (Exception e) {
                     Log.e("Catch register", "Exception " + e.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void syncAllUsers(final APIListener listener){
+
+        final AQuery aq = new AQuery(context);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", User.getInstance().getToken());
+
+        aq.ajax("http://172.31.1.120:8888/tweetbrow/user/all", params, JSONObject.class, new AjaxCallback<JSONObject>() {
+            @Override
+            public void callback(String url, JSONObject json, AjaxStatus status) {
+
+                try {
+
+                    if (json.getString("reponse").equals("success")) {
+
+                        Realm realm = Realm.getInstance(context);
+                        realm.beginTransaction();
+
+                        JSONArray users = json.getJSONArray("data");
+
+                        for (int i = 0; i < users.length(); i++) {
+                            users.getJSONObject(i).put("token", "notoken");
+                            realm.createOrUpdateObjectFromJson(User.class, users.getJSONObject(i));
+                        }
+
+                        realm.commitTransaction();
+
+                        Log.d("Sync users API", "Synchronisation terminée.");
+
+                        listener.callback();
+
+                    } else
+                        Log.e("Erreur sync users", "API return false : " + json.toString());
+
+                } catch (Exception e) {
+                    Log.e("Catch sync users", "Exception " + e.getMessage());
                 }
 
             }

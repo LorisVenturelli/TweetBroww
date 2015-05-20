@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         String token = preferences.getString("token", null);
         user.setToken(token);
 
-        if(user.isNotConnected()){
+        if(user.getToken() == null){
 
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -142,6 +142,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         else if(id == R.id.action_logout) {
             logout();
         }
+        else if(id == R.id.action_listusers) {
+            Intent intent = new Intent(MainActivity.this, ListUsersActivity.class);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -172,9 +176,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         SharedPreferences preferences = this.getApplicationContext().getSharedPreferences("token", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.commit();
 
-        User.getInstance().disconnect();
+        User.getInstance().setToken(null);
+        User.getInstance().setLogin(null);
 
         manager.deleteAll();
 

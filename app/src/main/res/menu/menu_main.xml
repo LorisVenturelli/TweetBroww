@@ -7,6 +7,10 @@
         android:title="Déconnexion"/>
 
     <item
+        android:id="@+id/action_listusers"
+        android:title="Utilisateurs"/>
+
+    <item
         android:id="@+id/action_refresh"
         android:icon="@mipmap/ic_action_refresh"
         app:showAsAction="ifRoom"

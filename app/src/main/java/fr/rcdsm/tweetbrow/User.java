@@ -1,22 +1,22 @@
 package fr.rcdsm.tweetbrow;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by rcdsm on 27/04/15.
  */
-public class User {
+public class User extends RealmObject {
+
+    @PrimaryKey
+    private long id;
 
     private String token;
 
-    public String getPseudo() {
-        return pseudo;
-    }
-
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
-    }
-
     private String pseudo;
     private String login;
+
+    private boolean followed;
 
     private static User INSTANCE = null;
 
@@ -31,28 +31,43 @@ public class User {
     }
 
     public String getToken() {
-        return INSTANCE.token;
+        return this.token;
     }
 
     public void setToken(String token) {
-        INSTANCE.token = token;
+        this.token = token;
     }
 
     public String getLogin() {
-        return INSTANCE.login;
+        return this.login;
     }
 
     public void setLogin(String login) {
-        INSTANCE.login = login;
+        this.login = login;
     }
 
-    public boolean isNotConnected(){
-        return INSTANCE.getToken() == null;
+    public long getId() {
+        return id;
     }
 
-    public void disconnect(){
-        INSTANCE.setToken(null);
-        INSTANCE.setLogin(null);
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    public boolean isFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(boolean followed) {
+        this.followed = followed;
     }
 }
 
