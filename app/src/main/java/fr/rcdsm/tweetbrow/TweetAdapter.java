@@ -1,6 +1,7 @@
 package fr.rcdsm.tweetbrow;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,9 @@ public class TweetAdapter extends BaseAdapter {
 
     LayoutInflater inflater;
 
-    public TweetAdapter(Context context, ArrayList<Tweet> notes) {
+    public TweetAdapter(Context context, ArrayList<Tweet> tweets) {
         this.context = context;
-        this.tweets = notes;
+        this.tweets = tweets;
 
         inflater = LayoutInflater.from(context);
     }
@@ -53,6 +54,7 @@ public class TweetAdapter extends BaseAdapter {
             holder.login = (TextView) convertView.findViewById(R.id.loginTweet);
             holder.date = (TextView) convertView.findViewById(R.id.dateTweet);
             holder.message = (TextView) convertView.findViewById(R.id.messageTweet);
+            holder.retweets=(TextView)convertView.findViewById(R.id.infoRetweet);
 
             convertView.setTag(holder);
         }
@@ -60,12 +62,22 @@ public class TweetAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Tweet note = tweets.get(position);
+        Tweet tweet = tweets.get(position);
 
-        holder.pseudo.setText(note.getPseudo());
-        holder.login.setText("@"+note.getLogin());
-        holder.date.setText(format.format(note.getDate_create()));
-        holder.message.setText(note.getMessage());
+        if(tweet.getRetweet()){
+            holder.retweets.setVisibility(View.VISIBLE);
+            holder.retweets.setText(tweet.getPseudo() + " a retweeté");
+            holder.retweets.setTextColor(Color.rgb(0, 102, 204));
+        }
+        else
+        {
+            holder.retweets.setVisibility(View.GONE);
+        }
+
+        holder.pseudo.setText(tweet.getPseudo());
+        holder.login.setText("@" + tweet.getLogin());
+        holder.date.setText(format.format(tweet.getDate_create()));
+        holder.message.setText(tweet.getMessage());
 
         return convertView;
     }
@@ -75,5 +87,6 @@ public class TweetAdapter extends BaseAdapter {
         public TextView login;
         public TextView date;
         public TextView message;
+        public TextView retweets;
     }
 }

@@ -104,6 +104,5 @@
             android:layout_below="@+id/barListView"
             android:id="@+id/listReply" />
 
-
     </RelativeLayout>
 </android.support.v7.widget.CardView>

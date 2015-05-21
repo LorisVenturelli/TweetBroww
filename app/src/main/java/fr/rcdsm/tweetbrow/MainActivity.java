@@ -4,15 +4,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -26,12 +25,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     ListView listview;
     FloatingActionButton fab;
 
-    ArrayList<Tweet> allNotes;
+    ArrayList<Tweet> allTweets;
     TweetManager manager;
-    TweetAdapter mListAdapter;
-    Menu MainMenu;
-
-    ArrayAdapter<String> searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +93,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-        MainMenu = menu;
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
@@ -165,8 +158,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         ClientAPI.getInstance().syncTweetbrowAPI(new ClientAPI.APIListener() {
             @Override
             public void callback() {
-                allNotes = manager.listTweets();
-                TweetAdapter adapter = new TweetAdapter(MainActivity.this, allNotes);
+                allTweets = manager.listTweets();
+                TweetAdapter adapter = new TweetAdapter(MainActivity.this, allTweets);
 
                 listview.setOnItemClickListener(MainActivity.this);
                 listview.setAdapter(adapter);

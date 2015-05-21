@@ -16,6 +16,7 @@
             android:textColor="#000000"
             android:textStyle="bold"
             android:text="Pseudo"
+            android:layout_below="@+id/infoRetweet"
             android:id="@+id/pseudoTweet" />
 
         <TextView
@@ -41,7 +42,13 @@
             android:layout_height="wrap_content"
             android:text="Login"
             android:id="@+id/loginTweet"
+            android:layout_below="@+id/infoRetweet"
             android:layout_toRightOf="@+id/pseudoTweet"
             android:paddingLeft="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/infoRetweet" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
