@@ -45,7 +45,7 @@ public class ClientAPI {
 
     private ClientAPI(Context appContext) {
         this.context = appContext;
-        this.urlApi = "http://192.168.100.38:8888";
+        this.urlApi = "http://172.31.1.120:8888";
 
         this.realm = Realm.getInstance(appContext);
     }
